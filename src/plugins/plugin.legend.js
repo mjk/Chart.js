@@ -24,6 +24,17 @@ defaults._set('global', {
 			// See controller.isDatasetVisible comment
 			meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
 
+			// Invert all other datasets if alt/option key is depressed
+			// (i.e., show all other sets if hiding this one; hide all others
+			// if showing this one)
+			if (e.altKey) {
+				helpers.each(ci.data.datasets, function(set, i) {
+					if (i !== index) {
+						ci.getDatasetMeta(i).hidden = !meta.hidden;
+					}
+				});
+			}
+
 			// We hid a dataset ... rerender the chart
 			ci.update();
 		},
